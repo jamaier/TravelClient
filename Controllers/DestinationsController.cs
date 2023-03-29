@@ -6,28 +6,40 @@ namespace TravelClient.Controllers;
 
 public class DestinationsController : Controller
 {
-  // [Route("Destinations/Page/{page}")]
-  // public async Task<IActionResult> Index(int page = 1)
-  // {
-  //   HttpClient client = new HttpClient();
-  //   HttpResponseMessage response = await client.GetAsync($"https://localhost:5001/Destinations/page/{page}");
-  //   response.EnsureSuccessStatusCode();
-  //   string responseBody = await response.Content.ReadAsStringAsync();
-  //   DestinationResponse destinationResponse = JsonConvert.DeserializeObject<DestinationResponse>(responseBody);
+// public async Task<IActionResult> Index(int page = 1)
+// {
+//     var httpClient = new HttpClient();
+//     var response = await httpClient.GetAsync("https://localhost:5001/api/Destinations");
+//     var destinations = await response.Content.ReadAsAsync<List<Destination>>();
 
-  //   return View(destinationResponse);
-  // }
+//     var pageSize = 10; // Set the number of items to display per page
+//     var count = destinations.Count;
+//     var data = destinations.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-  public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 5)
+//     var viewModel = new DestinationViewModel
+//     {
+//         Destinations = data,
+//         PageNumber = page,
+//         PageSize = pageSize,
+//         TotalItems = count,
+//         PageCount = (int)Math.Ceiling((double)count / pageSize)
+//     };
+
+//     return View(viewModel);
+// }
+
+  public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 5, int pageCount = 3, int destPerPg = 6, int ? page)
 {
     var httpClient = new HttpClient();
-    var response = await httpClient.GetAsync($"https://localhost:5001/api/destinations?page={pageNumber}&pageSize={pageSize}");
+    var response = await httpClient.GetAsync($"https://localhost:5001/api/destinations?pageNumber={pageNumber}");
     var content = await response.Content.ReadAsStringAsync();
-    var destinations = JsonConvert.DeserializeObject<List<Destination>>(content);
+    var destinations = JsonConvert.DeserializeObject<List<Destination>>(content); 
 
+    ViewBag.DestPerPg = destPerPg;
     ViewBag.PageNumber = pageNumber;
     ViewBag.PageSize = pageSize;
-    ViewBag.TotalPages = (int)Math.Ceiling((double)destinations.Count / pageSize);
+    ViewBag.pageCount = pageCount;
+    ViewBag.TotalPages = (int)Math.Ceiling((double)destinations.Count / pageCount);
 
     return View(destinations);
 }

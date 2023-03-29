@@ -25,6 +25,17 @@ namespace TravelClient.Models
 
       return destinationList;
     }
+      // [Route("Destinations/Page/{page}")]
+  // public async Task<IActionResult> Index(int page = 1)
+  // {
+  //   HttpClient client = new HttpClient();
+  //   HttpResponseMessage response = await client.GetAsync($"https://localhost:5001/Destinations/page/{page}");
+  //   response.EnsureSuccessStatusCode();
+  //   string responseBody = await response.Content.ReadAsStringAsync();
+  //   DestinationResponse destinationResponse = JsonConvert.DeserializeObject<DestinationResponse>(responseBody);
+
+  //   return View(destinationResponse);
+  // }
 
     public static Destination GetDetails(int id)
     {

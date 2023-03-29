@@ -1,36 +1,13 @@
-
-@* @model PaginatedList<TravelClient.Models.Destination> *@
-
 @{
     ViewData["Title"] = "Destinations";
 }
 
+
 <h1>All Destinations</h1>
 
 <h3>Actions:</h3>
-
 <p>@Html.ActionLink("Add a new destination", "Create")</p>
 
-<h3>Destinations:</h3>
-<ol>
-@foreach (Destination destination in Model)
-{
-  <li><strong>@destination.City</strong>, @destination.Country | <a href="/Destinations/Details/@(destination.DestinationId)">View Details</a></li>
-}
-</ol>
-
-<div class="row">
-    <div class="col">
-        <ul class="pagination">
-            @for (int i = 1; i <= ViewBag.TotalPages; i++)
-            {
-                <li class="page-item @(ViewBag.PageNumber == i ? "active" : "")">
-                    <a class="page-link" href="/Home/Index?pageNumber=@i&pageSize=@ViewBag.PageSize">@i</a>
-                </li>
-            }
-        </ul>
-    </div>
-</div>
 <div class="row">
     @foreach (var destination in Model)
     {
@@ -38,31 +15,24 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <h5 class="card-title">@destination.City</h5>
-                    <p class="card-text">@destination.City</p>
-                    <a href="#" class="btn btn-primary">All Destinations</a>
+                    <p class="card-text">@destination.Country</p>
+                    <a href="/Destinations/Details/@(destination.DestinationId)" class="btn btn-primary">Details</a>
                 </div>
             </div>
         </div>
     }
+
 </div>
-
-
-@* <!-- @{
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-}
-
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex - 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @prevDisabled">
-    Previous
-</a>
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @nextDisabled">
-    Next
-</a> --> *@
+<div class="row">
+    <div class="col">
+        <ul class="pagination">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            
+            {
+                <li class="page-item @(ViewBag.PageNumber == i ? "active" : "")">
+                    <a class="page-link" href="/Destinations?pageNumber=@i&pageCount=@ViewBag.PageCount">@i</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
