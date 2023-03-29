@@ -13,7 +13,7 @@ namespace TravelClient.Models
     public string City { get; set; }
     public string Review { get; set; }
     public int Rating { get; set; }
-    // public string UserName { get; set; }\
+    public string UserName { get; set; }
 
     public static List<Destination> GetDestinations()
     {
