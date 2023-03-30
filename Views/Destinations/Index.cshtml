@@ -1,15 +1,17 @@
 @{
-    ViewData["Title"] = "Destinations";
+ViewData["Title"] = "Destinations";
+int pageSize = 6;
+int currentPage = ViewBag.CurrentPage;
+int startIndex = (currentPage - 1) * pageSize;
+int endIndex = Math.Min(startIndex + pageSize, Model.Count);
+List<Destination> destinations = Model.GetRange(startIndex, endIndex - startIndex);
 }
 
-
 <h1>All Destinations</h1>
-
 <h3>Actions:</h3>
 <p>@Html.ActionLink("Add a new destination", "Create")</p>
-
 <div class="row">
-    @foreach (Destination destination in Model)
+    @foreach (Destination destination in destinations)
     {
         <div class="col-md-4">
             <div class="card mb-4">
@@ -21,18 +23,24 @@
             </div>
         </div>
     }
-
 </div>
 <div class="row">
     <div class="col">
         <ul class="pagination">
-             @for (int i = 1; i <= ViewBag.PageSize; i++)
-            
+            @if (currentPage > 1)
             {
-                <li class="page-item @(ViewBag.PageNumber == i ? "active" : "")">
-                    <a class="page-link" href="/Destinations?pageNumber=@i&pageCount=@ViewBag.PageCount">@i</a>
+                <a href="/Destinations?page=@(currentPage - 1)&pageSize=@pageSize"><button class="page-link">Prev</button></a>
+            }
+            @for (int i = 1; i <= Math.Ceiling((double)Model.Count / ViewBag.pageSize); i++)
+            {
+                <li class="page-item @(currentPage == i ? "active" : "")">
+                    <a class="page-link" href="/Destinations?page=@i&pageSize=@pageSize">@i</a>
                 </li>
-            } 
+            }
+            @if (currentPage < Math.Ceiling((double)Model.Count / pageSize))
+            {
+                <a href="/Destinations?page=@(currentPage + 1)&pageSize=@pageSize"><button class="page-link">Next</button></a>
+            }
         </ul>
     </div>
 </div>
