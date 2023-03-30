@@ -15,15 +15,15 @@ namespace TravelClient.Models
     public int Rating { get; set; }
     public string UserName { get; set; }
 
-    public static List<Destination> GetDestinations()
+    public static Destination[] GetDestinations()
     {
-      var apiCallTask = ApiHelper.GetAll();
-      var result = apiCallTask.Result;
+      Task<string> apiCallTask = ApiHelper.GetAll();
+      string result =  apiCallTask.Result;
+      
+      JArray jsonResponse = JArray.Parse(result);
+      List<Destination> destinationList = JsonConvert.DeserializeObject<List<Destination>>(jsonResponse.ToString());
 
-      JArray jsonResponse = JsonConvert.DeserializeObject<JArray>(result);
-      List<Destination>destinationList = JsonConvert.DeserializeObject<List<Destination>>(jsonResponse.ToString());
-
-      return destinationList;
+      return destinationList.ToArray();
     }
       // [Route("Destinations/Page/{page}")]
   // public async Task<IActionResult> Index(int page = 1)
@@ -42,7 +42,7 @@ namespace TravelClient.Models
       var apiCallTask = ApiHelper.Get(id);
       var result = apiCallTask.Result;
 
-      JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(result);
+      JObject jsonResponse = JObject.Parse(result);
       Destination destination = JsonConvert.DeserializeObject<Destination>(jsonResponse.ToString());
 
       return destination;

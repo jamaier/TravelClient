@@ -1,0 +1,72 @@
+    [HttpGet]
+    public async Task<IActionResult> GetQuotes( int maxWords, string speaker, bool question = false, int page = 1, int pageSize = 10)
+    {
+      IQueryable<Quote> query = _db.Quotes.AsQueryable();
+
+      if (speaker != null)
+      {
+        query = query.Where(entry => entry.Speaker == speaker);
+      }
+      if (question)
+      {  
+        query = query.Where(entry => entry.Text.EndsWith("?"));
+      }
+      if (maxWords != 0)
+      {  
+        query = query.Where(entry => entry.NumberOfWords <= maxWords);
+      }
+        // Calculate the number of items to skip based on the page size and requested page.
+        int skip = (page - 1) * pageSize;
+
+        // Retrieve the data from your data source, applying the pagination parameters.
+        List<Quote> quotes = await query
+            .Skip(skip)
+            .Take(pageSize)
+            .ToListAsync();
+
+        // Determine the total number of items in your data source.
+        int totalCount = _db.Quotes.Count();
+
+        // Create a response object to hold the paginated data and total count.
+        var response = new
+        {
+            Data = quotes,
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize
+        };
+
+        // Return the paginated data to the client.
+        return Ok(response);
+    }
+
+  [AllowAnonymous]
+  public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+  {
+    List<Quote> quoteList = new List<Quote> { };
+    using (var httpClient = new HttpClient())
+    {
+      using (var response = await httpClient.GetAsync($"https://localhost:5001/api/Quotes?question=false&page={page}&pageSize={pageSize}"))
+      {
+        string apiResponse = await response.Content.ReadAsStringAsync();
+        JObject jsonResponse = JObject.Parse(apiResponse);
+        JArray quoteArray = (JArray)jsonResponse["data"];
+        quoteList = quoteArray.ToObject<List<Quote>>();
+      }
+    }
+    List<Quote> quoteList2 = new List<Quote> { };
+    using (var httpClient = new HttpClient())
+    {
+      using (var response = await httpClient.GetAsync("https://localhost:5001/api/Quotes?question=false&page=1&pageSize=1001"))
+      {
+        string apiResponse = await response.Content.ReadAsStringAsync();
+        JObject jsonResponse = JObject.Parse(apiResponse);
+        JArray quoteArray = (JArray)jsonResponse["data"];
+        quoteList2 = quoteArray.ToObject<List<Quote>>();
+      }
+    }
+    ViewBag.LastId = quoteList2.Count();
+    ViewBag.CurrentPage = page;
+    ViewBag.PageSize = pageSize;
+    return View(quoteList);
+  }

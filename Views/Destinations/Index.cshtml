@@ -9,7 +9,7 @@
 <p>@Html.ActionLink("Add a new destination", "Create")</p>
 
 <div class="row">
-    @foreach (var destination in Model)
+    @foreach (Destination destination in Model)
     {
         <div class="col-md-4">
             <div class="card mb-4">
@@ -26,13 +26,13 @@
 <div class="row">
     <div class="col">
         <ul class="pagination">
-            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+             @for (int i = 1; i <= ViewBag.PageSize; i++)
             
             {
                 <li class="page-item @(ViewBag.PageNumber == i ? "active" : "")">
                     <a class="page-link" href="/Destinations?pageNumber=@i&pageCount=@ViewBag.PageCount">@i</a>
                 </li>
-            }
+            } 
         </ul>
     </div>
 </div>
