@@ -194,3 +194,4 @@ List<Destination> destinations = Model.GetRange(startIndex, endIndex - startInde
     </div>
 </div>
 
+NOTE TO SELF: INSTALL PAGINATED PACKAGE LIST IN CSPROJ

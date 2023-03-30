@@ -33,7 +33,7 @@ A Mvc application that consumes a Travel API. Made for Epicodus Coding School.
 
 ## Known Bugs
 
-* 🍴 _No known bugs_
+* 🍴 _PUT method not adding to the database._
 
 * 🍴 _Please reach out with any questions or concerns to [eliot.lauren@gmail.com](eliot.lauren@gmail.com), [mollyrdonegan@gmail.com](mollyrdonegan@gmail.com), [jacobamaier@gmail.com](jacobamaier@gmail.com)_
 
